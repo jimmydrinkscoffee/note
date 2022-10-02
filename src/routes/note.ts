@@ -3,12 +3,14 @@ import Joi from "joi";
 
 import { failedResponse, successResponse } from "../helpers/response";
 import validateRequest from "../middlewares/validateRequest";
+import verifyToken from "../middlewares/verifyToken";
 import NoteModel from "../models/NoteModel";
 
 const noteRoute = Router();
 
 noteRoute.put(
   "/",
+  verifyToken,
   validateRequest({
     owner: Joi.string().required(),
     title: Joi.string().required(),
@@ -26,7 +28,7 @@ noteRoute.put(
   }
 );
 
-noteRoute.get("/:id", async (req, res) => {
+noteRoute.get("/:id", verifyToken, async (req, res) => {
   try {
     const note = await NoteModel.findOne({ _id: req.params.id });
 
@@ -38,6 +40,7 @@ noteRoute.get("/:id", async (req, res) => {
 
 noteRoute.post(
   "/:id",
+  verifyToken,
   validateRequest({
     title: Joi.string(),
     content: Joi.string(),
@@ -57,7 +60,7 @@ noteRoute.post(
   }
 );
 
-noteRoute.delete("/:id", async (req, res) => {
+noteRoute.delete("/:id", verifyToken, async (req, res) => {
   try {
     const note = await NoteModel.findByIdAndDelete(req.params.id);
 
