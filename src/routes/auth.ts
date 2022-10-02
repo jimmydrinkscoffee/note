@@ -5,7 +5,7 @@ import Joi from "joi";
 import { failedResponse, successResponse } from "../helpers/response";
 import { genToken } from "../helpers/token";
 import validateRequest from "../middlewares/validateRequest";
-import User from "../models/User";
+import UserModel from "../models/UserModel";
 
 const authRoute = Router();
 
@@ -21,7 +21,7 @@ authRoute.post(
       const salt = await genSalt();
       const hashedPw = await hash(req.body["password"], salt);
 
-      const usrModel = new User({
+      const usrModel = new UserModel({
         name: req.body["name"],
         email: req.body["email"],
         password: hashedPw,
@@ -45,7 +45,7 @@ authRoute.post(
   }),
   async (req, res) => {
     try {
-      const usr = await User.findOne({ email: req.body["email"]! });
+      const usr = await UserModel.findOne({ email: req.body["email"]! });
       if (!usr) {
         return res.status(401).json(failedResponse("account does not exist"));
       }
