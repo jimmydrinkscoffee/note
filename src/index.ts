@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 import authRoute from "./routes/auth";
+import noteRoute from "./routes/note";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const server = express();
 server.use(json());
 
 server.use("/auth", authRoute);
+server.use("/note", noteRoute);
 
 server.listen(process.env["PORT"], () => {
   console.log("server up:", process.env["PORT"]);
